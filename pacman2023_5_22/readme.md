@@ -9,5 +9,5 @@
 * 使用說明:
   1. 下載 pacman.zip
   2. 解壓縮
-  3. 執行pac-amn.exe =>遊戲即可遊玩
-   
+  3. 執行pac-man.exe =>遊戲即可遊玩
+  4. !!HAVE FUN!!
