@@ -10,4 +10,4 @@
   1. 下載 pacman.zip
   2. 解壓縮
   3. 執行pac-man.exe =>遊戲即可遊玩
-  4. -HAVE-FUN-
+  4.  **HAVE FUN**
