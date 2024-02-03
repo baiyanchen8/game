@@ -1,3 +1,19 @@
+# xbox controller viewer
 
-未完成品，因本人不想用obs而誕生的監測xbox手柄的工具，最大問題為視窗失焦就不會動了，
-之後找個能用的函式庫補上?
+## 工作環境
+系統 : win11 (非windows 系統保證跑不動)
+
+## 使用函式庫
+os
+pygame
+sys
+threading
+win32api
+win32con
+win32gui
+ctypes
+inputs 
+如果想自己跑code 請確保有安裝
+
+## others 
+None
