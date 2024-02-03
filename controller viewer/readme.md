@@ -15,5 +15,10 @@ ctypes
 inputs 
 如果想自己跑code 請確保有安裝
 
+
+## 安裝包
+install.zip
+
 ## others 
-None
+注意其中並無提供任何可調整的選項歐
+使用前請三思
