@@ -5,6 +5,12 @@ font_path={
 }
 pic={
     "controller":"pic/controller-1827840_640.png",
-    "lt_frame":"pic/newlt.png",
-    "rt_frame":"pic/new.png"
+    "lt_frame":"pic/lt.png",
+    "rt_frame":"pic/rt.png",
+    "RB":"pic/rb.png",
+    "LB":"pic/lb.png",
+    "DD":"pic/newdown.png",
+    "DU":"pic/newup.png",
+    "DL":"pic/newleft.png",
+    "DR":"pic/newright.png",
 }

@@ -9,6 +9,7 @@ import ctypes
 
 from method.draw_text import *
 from method.img_path import *
+from method import nn 
 
 def main_thread():
     pg.init()
@@ -43,6 +44,14 @@ def main_thread():
         rt_frame_path = pic["rt_frame"]  
         rt_frame_image = pg.image.load(rt_frame_path).convert_alpha()
 
+        rb_image=pg.image.load(pic["RB"]).convert_alpha()
+        lb_image=pg.image.load(pic["LB"]).convert_alpha()
+        
+        dd_image=pg.image.load(pic["DD"]).convert_alpha()
+        du_image=pg.image.load(pic["DU"]).convert_alpha()
+        dl_image=pg.image.load(pic["DL"]).convert_alpha()
+        dr_image=pg.image.load(pic["DR"]).convert_alpha()
+        
         # 設定新的圖片大小
         new_width = 300
         new_height = 200
@@ -52,6 +61,15 @@ def main_thread():
         resized_lt_frame_image = pg.transform.scale(lt_frame_image, (60, 65))
         resized_rt_frame_image = pg.transform.scale(rt_frame_image, (60, 65))
 
+        rb_image = pg.transform.scale(rb_image, (139*0.5, 49*0.5))
+        lb_image = pg.transform.scale(lb_image, (139*0.5, 49*0.5))
+        
+        
+        dd_image=pg.transform.scale(dd_image, (dd_image.get_width()*0.5, dd_image.get_height()*0.5))
+        du_image=pg.transform.scale(du_image, (du_image.get_width()*0.5, du_image.get_height()*0.5))
+        dl_image=pg.transform.scale(dl_image, (dl_image.get_width()*0.5, dl_image.get_height()*0.5))
+        dr_image=pg.transform.scale(dr_image, (dr_image.get_width()*0.5, dr_image.get_height()*0.5))
+        
         lt_percentage = -1
         rt_percentage = -1
         fuchsia = (0, 0, 0)  # Transparency color
@@ -66,34 +84,17 @@ def main_thread():
         ctypes.windll.user32.SetForegroundWindow(hwnd)
         buttonlist = ["a", "b", "x", 'y', "lb", "rb"]
         buttonstate = [0, 0, 0, 0, 0, 0]  
-
+        joy = nn.XboxController()
         clock = pg.time.Clock()  # 創建時間迴圈物件
         while True:
             pg.event.pump()  # 處理事件
-            print(1)
-            for event in pg.event.get():
+            
+            for event in nn.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     exit()
-                elif event.type == pg.JOYBUTTONDOWN:
-                    print("press:", event.button)
-                    try:
-                        buttonstate[event.button] = 1
-                    except:
-                        pass
-                elif event.type == pg.JOYBUTTONUP:
-                    print("up:", event.button)
-                    try:
-                        buttonstate[event.button] = 0
-                    except:
-                        pass
-                elif event.type == pg.JOYAXISMOTION:
-                    print("axis:", event.axis, "value:", event.value)
-                    if event.axis == 5:
-                        rt_percentage = event.value
-                    elif event.axis == 4:
-                        lt_percentage = event.value
-
+            rt_percentage=joy.RightTrigger
+            lt_percentage=joy.LeftTrigger
             # 清除顯示器
             screen.fill(fuchsia) 
             # 顯示手把圖片
@@ -106,11 +107,24 @@ def main_thread():
             pg.draw.circle(screen, (250, 250, 250), joystick_bg_pos, joystick_bg_radius)
 
             # 左搖桿實際位置
-            joystick_x = int(joystick.get_axis(0) * 17)  
-            joystick_y = int(joystick.get_axis(1) * 17)  
+            joystick_x = int(joy.LeftJoystickX * 17)  
+            joystick_y = int(-joy.LeftJoystickY * 17)  
             joystick_pos = (joystick_bg_pos[0] + joystick_x, joystick_bg_pos[1] + joystick_y)
 
-            # 顯示左搖桿實際位置
+            # 顯示右搖桿實際位置
+            pg.draw.circle(screen, (0, 0, 255), joystick_pos, 10)
+            
+            # 右搖桿背景
+            joystick_bg_pos = (200, 180)
+            joystick_bg_radius = 17
+            pg.draw.circle(screen, (250, 250, 250), joystick_bg_pos, joystick_bg_radius)
+
+            # 右搖桿實際位置
+            joystick_x = int(joy.RightJoystickX * 17)  
+            joystick_y = int(-joy.RightJoystickY * 17)  
+            joystick_pos = (joystick_bg_pos[0] + joystick_x, joystick_bg_pos[1] + joystick_y)
+
+            # 顯示右搖桿實際位置
             pg.draw.circle(screen, (0, 0, 255), joystick_pos, 10)
             
             # 顯示 LT 外框和填充
@@ -130,13 +144,29 @@ def main_thread():
             pg.draw.rect(screen, (0, 0, 0), rt_fill_rect)
 
             # 按鈕顯示
-            button_position = [(239, 151), (), (), (239, 111), (), ()]
+            button_position = [(239, 151), (239+20, 131), (239-20, 131), (239, 111), (), ()]
             buttonlist = ["a", "b", "x", 'y', "lb", "rb"]
             button_radius = 11
-            if buttonstate[0] == 1:
+            if joy.A == 1:
                 pg.draw.circle(screen, (250, 250, 250), button_position[0], button_radius)
-            elif buttonstate[3] == 1:
+            if joy.Y == 1:
                 pg.draw.circle(screen, (250, 250, 250), button_position[3], button_radius)
+            if joy.X == 1:
+                pg.draw.circle(screen, (250, 250, 250), button_position[2], button_radius)
+            if joy.B == 1:
+                pg.draw.circle(screen, (250, 250, 250), button_position[1], button_radius)
+            if joy.RightBumper ==1:
+                screen.blit(rb_image, (200, 70))
+            if joy.LeftBumper ==1:
+                screen.blit(lb_image, (50, 70))
+            if joy.DownDPad==1:
+                screen.blit(dd_image, (116, 172))
+            if joy.UpDPad==1:
+                screen.blit(du_image, (116, 156))
+            if joy.LeftDPad==1:
+                screen.blit(dl_image, (100, 172))
+            if joy.RightDPad==1:
+                screen.blit(dr_image, (116, 172))
             pg.display.flip()
             clock.tick(60)  # 控制每秒迴圈執行次數，保持遊戲順暢
 
