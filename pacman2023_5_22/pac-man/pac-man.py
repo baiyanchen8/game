@@ -438,7 +438,7 @@ while(run):
     clock.tick_busy_loop(60)
     if switch==0:
         Menu(True)
-    elif switch ==1:    
+    elif switch ==1:
         Game_main(True)
     elif switch ==2:
         rank(True)
